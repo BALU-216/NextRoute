@@ -1,0 +1,5 @@
+{
+  "name": "ALGORITHM of Smart City Traffic Sim",
+  "description": "A dynamic traffic simulation where vehicles intelligently route based on travel time and road capacity. Features AI-generated maps.",
+  "requestFramePermissions": []
+}
