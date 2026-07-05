@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { CityData } from "../types";
+import { CityData, TrafficStats } from "../types";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
@@ -62,12 +62,12 @@ export const generateCityMap = async (description: string): Promise<CityData | n
     const text = response.text;
     if (!text) return null;
     const result = JSON.parse(text) as CityData;
-    
+
     // Validate structure
-    if (!result || typeof result !== 'object') return null;
+    if (!result || typeof result !== "object") return null;
     if (!Array.isArray(result.nodes)) result.nodes = [];
     if (!Array.isArray(result.edges)) result.edges = [];
-    
+
     return result;
   } catch (error) {
     console.error("Failed to generate map:", error);
@@ -75,19 +75,19 @@ export const generateCityMap = async (description: string): Promise<CityData | n
   }
 };
 
-export const analyzeTraffic = async (data: any) => {
-    try {
-        const model = "gemini-3-flash-preview";
-        const prompt = `Analyze this traffic simulation snapshot: ${JSON.stringify(data)}. 
+export const analyzeTraffic = async (data: TrafficStats): Promise<string> => {
+  try {
+    const model = "gemini-3-flash-preview";
+    const prompt = `Analyze this traffic simulation snapshot: ${JSON.stringify(data)}. 
         Provide a concise, 2-sentence insight about congestion and flow efficiency.`;
 
-        const response = await ai.models.generateContent({
-            model,
-            contents: prompt,
-        });
-        return response.text;
-    } catch (e) {
-        console.error(e);
-        return "Analysis unavailable.";
-    }
-}
+    const response = await ai.models.generateContent({
+      model,
+      contents: prompt,
+    });
+    return response.text;
+  } catch (e) {
+    console.error(e);
+    return "Analysis unavailable.";
+  }
+};

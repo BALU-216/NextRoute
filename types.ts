@@ -24,7 +24,7 @@ export interface Vehicle {
   progress: number; // 0 to 1 along the current edge
   path: string[]; // Remaining sequence of Node IDs to visit
   color: string;
-  status: 'waiting' | 'moving' | 'arrived' | 'stuck';
+  status: "waiting" | "moving" | "arrived" | "stuck";
   currentEdgeId: string | null;
 }
 

@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { CityData, Vehicle } from '../types';
+import React, { useMemo } from "react";
+import { CityData, Vehicle } from "../types";
 
 interface SimulationCanvasProps {
   city: CityData;
@@ -8,17 +8,16 @@ interface SimulationCanvasProps {
   selectedNode: string | null;
 }
 
-const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ 
-  city, 
-  vehicles, 
+const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
+  city,
+  vehicles,
   onNodeClick,
-  selectedNode 
+  selectedNode,
 }) => {
-  
   // Calculate edge utilization for styling
   const edgeUtilization = useMemo(() => {
     const counts: Record<string, number> = {};
-    vehicles.forEach(v => {
+    vehicles.forEach((v) => {
       if (v.currentEdgeId) {
         counts[v.currentEdgeId] = (counts[v.currentEdgeId] || 0) + 1;
       }
@@ -44,18 +43,19 @@ const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
 
         {/* Edges */}
         {city.edges.map((edge) => {
-          const startNode = city.nodes.find(n => n.id === edge.source);
-          const endNode = city.nodes.find(n => n.id === edge.target);
+          const startNode = city.nodes.find((n) => n.id === edge.source);
+          const endNode = city.nodes.find((n) => n.id === edge.target);
           if (!startNode || !endNode) return null;
 
           const load = edgeUtilization[edge.id] || 0;
           const isFull = load >= edge.capacity;
           const ratio = load / edge.capacity;
-          
+
           let strokeColor = "#475569"; // slate-600
-          if (ratio > 0.8) strokeColor = "#ef4444"; // red
+          if (ratio > 0.8)
+            strokeColor = "#ef4444"; // red
           else if (ratio > 0.5) strokeColor = "#f59e0b"; // orange
-          
+
           return (
             <g key={edge.id}>
               <line
@@ -69,8 +69,8 @@ const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
                 strokeLinecap="round"
               />
               {/* Capacity Indicator Label on Edge */}
-              <text 
-                x={(startNode.x + endNode.x) / 2} 
+              <text
+                x={(startNode.x + endNode.x) / 2}
                 y={(startNode.y + endNode.y) / 2 - 5}
                 className="text-[10px] fill-slate-400 font-mono"
                 textAnchor="middle"
@@ -85,8 +85,8 @@ const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
         {city.nodes.map((node) => {
           const isSelected = selectedNode === node.id;
           return (
-            <g 
-              key={node.id} 
+            <g
+              key={node.id}
               onClick={() => onNodeClick(node.id)}
               className="cursor-pointer hover:opacity-80 transition-opacity"
             >
@@ -121,47 +121,47 @@ const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
 
         {/* Vehicles */}
         {vehicles.map((vehicle) => {
-            if (vehicle.status === 'arrived') return null;
-            
-            // Interpolate position
-            const startNode = city.nodes.find(n => n.id === vehicle.currentNode);
-            // If waiting, just stay at start
-            if (vehicle.status === 'waiting' || vehicle.status === 'stuck' || !vehicle.nextNode) {
-                 if (!startNode) return null;
-                 return (
-                    <circle
-                        key={vehicle.id}
-                        cx={startNode.x}
-                        cy={startNode.y}
-                        r={6}
-                        fill={vehicle.color}
-                        stroke="#fff"
-                        strokeWidth={1}
-                    />
-                 );
-            }
+          if (vehicle.status === "arrived") return null;
 
-            const targetNode = city.nodes.find(n => n.id === vehicle.nextNode);
-            if (!startNode || !targetNode) return null;
-
-            const dx = targetNode.x - startNode.x;
-            const dy = targetNode.y - startNode.y;
-            const x = startNode.x + dx * vehicle.progress;
-            const y = startNode.y + dy * vehicle.progress;
-
+          // Interpolate position
+          const startNode = city.nodes.find((n) => n.id === vehicle.currentNode);
+          // If waiting, just stay at start
+          if (vehicle.status === "waiting" || vehicle.status === "stuck" || !vehicle.nextNode) {
+            if (!startNode) return null;
             return (
-                <g key={vehicle.id}>
-                     <circle
-                        cx={x}
-                        cy={y}
-                        r={8}
-                        fill={vehicle.color}
-                        stroke="#fff"
-                        strokeWidth={2}
-                        className="transition-all duration-75 ease-linear"
-                    />
-                </g>
+              <circle
+                key={vehicle.id}
+                cx={startNode.x}
+                cy={startNode.y}
+                r={6}
+                fill={vehicle.color}
+                stroke="#fff"
+                strokeWidth={1}
+              />
             );
+          }
+
+          const targetNode = city.nodes.find((n) => n.id === vehicle.nextNode);
+          if (!startNode || !targetNode) return null;
+
+          const dx = targetNode.x - startNode.x;
+          const dy = targetNode.y - startNode.y;
+          const x = startNode.x + dx * vehicle.progress;
+          const y = startNode.y + dy * vehicle.progress;
+
+          return (
+            <g key={vehicle.id}>
+              <circle
+                cx={x}
+                cy={y}
+                r={8}
+                fill={vehicle.color}
+                stroke="#fff"
+                strokeWidth={2}
+                className="transition-all duration-75 ease-linear"
+              />
+            </g>
+          );
         })}
       </svg>
     </div>

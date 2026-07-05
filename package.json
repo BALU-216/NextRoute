@@ -9,15 +9,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react-dom": "^19.2.3",
+    "@google/genai": "^1.38.0",
     "lucide-react": "^0.563.0",
     "react": "^19.2.3",
-    "@google/genai": "^1.38.0"
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
+    "@eslint/css": "^1.4.0",
+    "@eslint/js": "^10.0.1",
+    "@eslint/json": "^2.0.1",
+    "@eslint/markdown": "^8.0.3",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.7.0",
+    "jiti": "^2.7.0",
+    "prettier": "^3.9.4",
     "typescript": "~5.8.2",
+    "typescript-eslint": "^8.62.1",
     "vite": "^6.2.0"
   }
 }
